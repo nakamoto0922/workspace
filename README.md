@@ -1,209 +1,112 @@
-Welcome to your new TanStack Start app! 
+# workspace
 
-# Getting Started
+TanStack Start + React + Vite をベースにした開発用プロジェクトです。  
+ローカル実行と Dev Container のどちらでも同じ手順に寄せやすいよう、Node.js 22 系と npm を前提にしています。
 
-To run this application locally:
+## 前提
+
+- Node.js `22.x`
+- npm
+- Docker / Dev Container を使う場合は Docker Desktop などの実行環境
+
+Node.js のバージョン合わせには [.nvmrc](/workspace/.nvmrc) を使えます。
 
 ```bash
+nvm use
+```
+
+## セットアップ
+
+### ローカルで起動する場合
+
+```bash
+cp .env.example .env
 npm ci
 npm run dev
 ```
 
-If you use the Dev Container, dependencies are installed automatically by `postCreateCommand`.
+アプリは `http://localhost:3000` で確認できます。
 
-# Building For Production
+### Dev Container で起動する場合
 
-To build this application for production:
+1. VS Code でこのワークスペースを開く
+2. `Reopen in Container` を実行する
+3. コンテナ作成後、必要なら `npm run dev` を実行する
+
+Dev Container では [`.devcontainer/devcontainer.json`](/workspace/.devcontainer/devcontainer.json) の `postCreateCommand` により `npm ci` が自動実行されます。
+
+## 環境変数
+
+ひな形として [.env.example](/workspace/.env.example) を用意しています。
 
 ```bash
+cp .env.example .env
+```
+
+現時点ではアプリ本体で必須の環境変数はありませんが、将来の DB 接続やサーバー設定に使えるよう、開発用の基本値を入れています。
+
+## よく使うコマンド
+
+```bash
+npm run dev
 npm run build
-```
-
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
-
-```bash
-npm run test
-```
-
-If there are no test files yet, the command exits successfully.
-
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `npm install @tailwindcss/vite tailwindcss -D`
-
-## Linting & Formatting
-
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
-
-```bash
+npm run preview
 npm run lint
 npm run format
 npm run check
 npm run fix
+npm run test
 ```
 
+各コマンドの役割は次のとおりです。
 
+- `npm run dev`: 開発サーバーを起動
+- `npm run build`: 本番ビルドを作成
+- `npm run preview`: ビルド結果をローカル確認
+- `npm run lint`: ESLint による静的解析
+- `npm run format`: Prettier でフォーマット差分を確認
+- `npm run check`: フォーマット確認と lint をまとめて実行
+- `npm run fix`: Prettier と ESLint の自動修正を実行
+- `npm run test`: Vitest を実行
 
-## Routing
+まだテストファイルが無い状態でも、`npm run test` は成功扱いになります。
 
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
+## 開発環境の設定
 
-### Adding A Route
+### 保存時フォーマット
 
-To add a new route to your application just add a new file in the `./src/routes` directory.
+VS Code では [.vscode/settings.json](/workspace/.vscode/settings.json) により、保存時に次が実行されます。
 
-TanStack will automatically generate the content of the route file for you.
+- Prettier によるフォーマット
+- ESLint の自動修正
 
-Now that you have two routes you can use a `Link` component to navigate between them.
+必要な拡張機能は次の 2 つです。
 
-### Adding Links
+- `esbenp.prettier-vscode`
+- `dbaeumer.vscode-eslint`
 
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
+これらは Dev Container の推奨拡張にも入っています。
 
-```tsx
-import { Link } from "@tanstack/react-router";
-```
+### コンテナ構成
 
-Then anywhere in your JSX you can use it like so:
+- アプリコンテナ: Node.js 22 ベース
+- DB コンテナ: PostgreSQL 16
 
-```tsx
-<Link to="/about">About</Link>
-```
+[docker-compose.yml](/workspace/docker-compose.yml) では `node_modules` を named volume に分離しているため、ホスト側との依存競合を避けやすくしています。
 
-This will create a link that will navigate to the `/about` route.
+## CI
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
+GitHub Actions の CI を追加しています。設定ファイルは [ci.yml](/workspace/.github/workflows/ci.yml) です。
 
-### Using A Layout
+以下を自動実行します。
 
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
+- `npm ci`
+- `npm run check`
+- `npm run build`
+- `npm run test`
 
-Here is an example layout that includes a header:
+## 補足
 
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+- Node.js の利用バージョンは [package.json](/workspace/package.json#L5) の `engines` と [.nvmrc](/workspace/.nvmrc) で明示しています。
+- エディタ共通の改行やインデントは [.editorconfig](/workspace/.editorconfig) でそろえています。
+- 依存更新は npm を前提にしています。
