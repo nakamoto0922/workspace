@@ -33,6 +33,18 @@ describe('skill map model', () => {
     expect(resolved['minor-js']?.status).toBe('available')
   })
 
+  it('allows one node to unlock multiple downstream nodes', () => {
+    const resolved = resolveSkillMap(sampleSkillMap, {
+      completedNodeIds: ['start-web', 'minor-css', 'major-react'],
+    })
+
+    expect(resolved['minor-props']?.status).toBe('available')
+    expect(resolved['minor-state']?.status).toBe('available')
+    expect(resolved['minor-fetch']?.status).toBe('available')
+    expect(resolved['minor-router']?.status).toBe('available')
+    expect(resolved['minor-form']?.status).toBe('available')
+  })
+
   it('returns nodes in visual layout order', () => {
     expect(getNodesInLayoutOrder(sampleSkillMap).map((node) => node.id)).toEqual([
       'start-web',
@@ -43,6 +55,8 @@ describe('skill map model', () => {
       'minor-props',
       'minor-state',
       'minor-fetch',
+      'minor-router',
+      'minor-form',
       'major-project',
     ])
   })
@@ -54,7 +68,7 @@ describe('skill map model', () => {
           id: 'a',
           title: 'A',
           description: '',
-          kind: 'major',
+          kind: 'tier1',
           layout: { column: 0, row: 0 },
           unlock: { mode: 'all', nodeIds: ['b'] },
         },
@@ -62,7 +76,7 @@ describe('skill map model', () => {
           id: 'b',
           title: 'B',
           description: '',
-          kind: 'minor',
+          kind: 'tier3',
           layout: { column: 1, row: 0 },
           unlock: { mode: 'all', nodeIds: ['a'] },
         },

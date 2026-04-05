@@ -1,7 +1,15 @@
 export type SkillNodeId = string
 export type SkillEdgeId = string
 
-export type SkillNodeKind = 'major' | 'minor'
+export const SKILL_NODE_KINDS = [
+  'tier1',
+  'tier2',
+  'tier3',
+  'tier4',
+  'tier5',
+] as const
+
+export type SkillNodeKind = (typeof SKILL_NODE_KINDS)[number]
 export type SkillNodeStatus = 'locked' | 'available' | 'completed'
 
 export type UnlockCondition = {
@@ -214,7 +222,7 @@ export const sampleSkillMap = createSkillMap({
       id: 'start-web',
       title: 'Web開発スタート',
       description: '最初の基点になる大ノード。',
-      kind: 'major',
+      kind: 'tier1',
       layout: { column: 0, row: 1 },
       unlock: { mode: 'all', nodeIds: [] },
     },
@@ -222,7 +230,7 @@ export const sampleSkillMap = createSkillMap({
       id: 'minor-html',
       title: 'HTMLを書く',
       description: 'ページの骨組みを作る。',
-      kind: 'minor',
+      kind: 'tier3',
       layout: { column: 1, row: 0 },
       unlock: { mode: 'all', nodeIds: ['start-web'] },
     },
@@ -230,7 +238,7 @@ export const sampleSkillMap = createSkillMap({
       id: 'minor-css',
       title: 'CSSで見た目を整える',
       description: '基本的な装飾を行う。',
-      kind: 'minor',
+      kind: 'tier3',
       layout: { column: 1, row: 1 },
       unlock: { mode: 'all', nodeIds: ['start-web'] },
     },
@@ -238,7 +246,7 @@ export const sampleSkillMap = createSkillMap({
       id: 'minor-js',
       title: 'JavaScriptで動きをつける',
       description: 'インタラクションを追加する。',
-      kind: 'minor',
+      kind: 'tier3',
       layout: { column: 1, row: 2 },
       unlock: { mode: 'all', nodeIds: ['start-web'] },
     },
@@ -246,7 +254,7 @@ export const sampleSkillMap = createSkillMap({
       id: 'major-react',
       title: 'React基礎',
       description: '次の大ノード。間の小ノードは横並び。',
-      kind: 'major',
+      kind: 'tier1',
       layout: { column: 2, row: 1 },
       unlock: { mode: 'any', nodeIds: ['minor-html', 'minor-css', 'minor-js'] },
     },
@@ -254,7 +262,7 @@ export const sampleSkillMap = createSkillMap({
       id: 'minor-props',
       title: 'propsで値を渡す',
       description: 'Reactの小ノード1。',
-      kind: 'minor',
+      kind: 'tier4',
       layout: { column: 3, row: 0 },
       unlock: { mode: 'all', nodeIds: ['major-react'] },
     },
@@ -262,7 +270,7 @@ export const sampleSkillMap = createSkillMap({
       id: 'minor-state',
       title: 'useStateで状態を持つ',
       description: 'Reactの小ノード2。',
-      kind: 'minor',
+      kind: 'tier4',
       layout: { column: 3, row: 1 },
       unlock: { mode: 'all', nodeIds: ['major-react'] },
     },
@@ -270,7 +278,7 @@ export const sampleSkillMap = createSkillMap({
       id: 'minor-fetch',
       title: 'fetchでAPI結果を表示する',
       description: 'Reactの小ノード3。',
-      kind: 'minor',
+      kind: 'tier4',
       layout: { column: 3, row: 2 },
       unlock: { mode: 'all', nodeIds: ['major-react'] },
     },
@@ -278,12 +286,28 @@ export const sampleSkillMap = createSkillMap({
       id: 'major-project',
       title: '小さなアプリを作る',
       description: 'Reactノード群の先にある次の大ノード。',
-      kind: 'major',
+      kind: 'tier2',
       layout: { column: 4, row: 1 },
       unlock: {
         mode: 'any',
         nodeIds: ['minor-props', 'minor-state', 'minor-fetch'],
       },
+    },
+    {
+      id: 'minor-router',
+      title: '画面遷移を作る',
+      description: 'React基礎から派生する別ルートの小ノード。',
+      kind: 'tier4',
+      layout: { column: 3, row: 3 },
+      unlock: { mode: 'all', nodeIds: ['major-react'] },
+    },
+    {
+      id: 'minor-form',
+      title: 'フォームを組み立てる',
+      description: 'React基礎から派生する別ルートの小ノード。',
+      kind: 'tier4',
+      layout: { column: 3, row: 4 },
+      unlock: { mode: 'all', nodeIds: ['major-react'] },
     },
   ],
   edges: [
@@ -339,6 +363,18 @@ export const sampleSkillMap = createSkillMap({
       id: 'edge-react-fetch',
       fromNodeId: 'major-react',
       toNodeId: 'minor-fetch',
+      kind: 'path',
+    },
+    {
+      id: 'edge-react-router',
+      fromNodeId: 'major-react',
+      toNodeId: 'minor-router',
+      kind: 'path',
+    },
+    {
+      id: 'edge-react-form',
+      fromNodeId: 'major-react',
+      toNodeId: 'minor-form',
       kind: 'path',
     },
     {
@@ -453,8 +489,12 @@ function compareNodesByLayout(left: SkillNode, right: SkillNode) {
   }
 
   if (left.kind !== right.kind) {
-    return left.kind === 'major' ? -1 : 1
+    return getNodeKindLevel(left.kind) - getNodeKindLevel(right.kind)
   }
 
   return left.title.localeCompare(right.title, 'ja')
+}
+
+function getNodeKindLevel(kind: SkillNodeKind) {
+  return SKILL_NODE_KINDS.indexOf(kind)
 }

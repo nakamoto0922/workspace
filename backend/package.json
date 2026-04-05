@@ -1,0 +1,10 @@
+{
+  "name": "backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo \"backend is not set up yet\"",
+    "build": "echo \"backend is not set up yet\"",
+    "test": "echo \"backend is not set up yet\""
+  }
+}

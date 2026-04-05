@@ -78,7 +78,7 @@ type SkillNode = {
   id: SkillNodeId
   title: string
   description: string
-  kind: 'major' | 'minor'
+  kind: 'tier1' | 'tier2' | 'tier3' | 'tier4' | 'tier5'
   layout: {
     column: number
     row: number
@@ -116,15 +116,29 @@ type SkillNode = {
 ### `kind`
 ノードの見た目上の種類です。
 
-- `major`: 大ノード
-- `minor`: 小ノード
+- `tier1`: 最も大きいノード
+- `tier2`: 大きめの中間ノード
+- `tier3`: 中くらいのノード
+- `tier4`: 小さめのノード
+- `tier5`: 最も細かいノード
 
 使い分けのイメージ:
 
-- `major`: 節目になる大きな学習テーマ
-- `minor`: その間をつなぐ具体的な学習項目
+- `tier1`: 学習マップの節目になる大テーマ
+- `tier2`: 大テーマの下にある章レベルのまとまり
+- `tier3`: 学習ルートを分岐させる中粒度ノード
+- `tier4`: 具体的な学習タスク
+- `tier5`: 必要ならさらに細かく分けた補助タスク
 
-この区別は主にUI表現のためのものです。
+上限を5段階に固定することで、
+
+- どこまでも細分化されすぎるのを防ぐ
+- UIごとのサイズルールを決めやすくする
+- 「どのくらい細かいノードか」の基準を共有しやすくする
+
+という狙いがあります。
+
+この区別は主にUI表現と粒度の目安のためのものです。
 解放条件そのものは `kind` ではなく `unlock` で決まります。
 
 ### `layout`
@@ -445,11 +459,11 @@ type ResolvedSkillNode = SkillNode & {
 現在のサンプルでは、次のような構造を想定しています。
 
 - `start-web`
-  - 最初の大ノード
+  - 最初の大ノード `tier1`
 - `minor-html`, `minor-css`, `minor-js`
-  - 次の列に並ぶ小ノード群
+  - 次の列に並ぶ中粒度ノード群 `tier3`
 - `major-react`
-  - その先にある大ノード
+  - その先にある大ノード `tier1`
   - 小ノード3つのうちどれか1つ完了で解放
 
 つまり、
@@ -477,3 +491,59 @@ type ResolvedSkillNode = SkillNode & {
 
 この2つを分けることで、
 見た目の気持ちよさと、学習設計の柔軟性を両立しやすくなります。
+
+---
+
+## 11. 多対多の例
+
+今の構造では、1つのノードが複数のノードの解放条件になることができます。
+
+例:
+
+- `major-react` を完了すると
+- `minor-props`
+- `minor-state`
+- `minor-fetch`
+- `minor-router`
+- `minor-form`
+
+のように、複数の後続ノードを同時に解放できます。
+
+これは各ノード側がそれぞれ `major-react` を前提として参照しているためです。
+
+```ts
+{
+  id: 'minor-props',
+  unlock: { mode: 'all', nodeIds: ['major-react'] }
+}
+
+{
+  id: 'minor-router',
+  unlock: { mode: 'all', nodeIds: ['major-react'] }
+}
+
+{
+  id: 'minor-form',
+  unlock: { mode: 'all', nodeIds: ['major-react'] }
+}
+```
+
+逆に、1つのノードが複数ノードを前提にすることもできます。
+
+```ts
+{
+  id: 'major-project',
+  unlock: {
+    mode: 'any',
+    nodeIds: ['minor-props', 'minor-state', 'minor-fetch']
+  }
+}
+```
+
+このため現在のモデルは、
+
+- 1対多
+- 多対1
+- 多対多
+
+の解放関係をすべて表現できます。
