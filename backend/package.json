@@ -3,8 +3,26 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "echo \"backend is not set up yet\"",
-    "build": "echo \"backend is not set up yet\"",
-    "test": "echo \"backend is not set up yet\""
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc --project tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "test": "npm run typecheck"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.0",
+    "dotenv": "^16.6.1",
+    "drizzle-orm": "^0.44.5",
+    "hono": "^4.9.8",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }

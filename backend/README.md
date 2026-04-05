@@ -1,13 +1,13 @@
 # backend
 
-バックエンド用の作業ディレクトリです。
+Hono + Drizzle + PostgreSQL を前提にしたバックエンドです。
 
-現時点ではまだ未実装ですが、今後はここに次のような責務を置けます。
+現時点では、次の土台まで入っています。
 
-- API
-- DBスキーマ
-- 認証
-- 永続化ロジック
-- ドメインサービス
+- Hono のアプリ起動
+- Drizzle の設定
+- PostgreSQL スキーマ定義
+- `skill-map` と `progress` の feature 分割
+- 最小 API エンドポイント
 
-いまの段階では、まず `frontend` と分離された置き場を確保することを目的にしています。
+詳しい構成は [backend-architecture.md](/workspace/docs/backend/backend-architecture.md) を参照してください。
