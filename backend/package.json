@@ -8,7 +8,9 @@
     "start": "node dist/server.js",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
     "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/db/seed.ts",
     "test": "npm run typecheck"
   },
   "dependencies": {
