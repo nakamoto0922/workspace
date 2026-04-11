@@ -7,7 +7,9 @@ export default function Footer() {
         <p className="m-0 text-sm">
           &copy; {year} Skill Map Studio. All rights reserved.
         </p>
-        <p className="island-kicker m-0">Connected with Hono + Drizzle + TanStack Start</p>
+        <p className="island-kicker m-0">
+          Connected with Hono + Drizzle + TanStack Start
+        </p>
       </div>
       <div className="mt-4 flex justify-center gap-4">
         <a

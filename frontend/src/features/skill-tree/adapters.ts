@@ -50,7 +50,9 @@ function normalizeNodeKind(kind: string): SkillNodeKind {
   return 'tier3'
 }
 
-function normalizeDifficulty(value: number | undefined): SkillNode['difficulty'] {
+function normalizeDifficulty(
+  value: number | undefined,
+): SkillNode['difficulty'] {
   if (value === undefined) {
     return undefined
   }

@@ -13,8 +13,8 @@ function About() {
           スキルマップを育てるための土台です。
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          frontend は TanStack Start、backend は Hono と Drizzle を使い、
-          共通の zod contract で API の型を共有しています。いまは
+          frontend は TanStack Start、backend は Hono と Drizzle を使い、 共通の
+          zod contract で API の型を共有しています。いまは
           スキルマップ一覧、ユーザー進捗、完了トグルまで接続済みです。
         </p>
       </section>

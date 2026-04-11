@@ -39,7 +39,10 @@ const config = defineConfig(({ mode }) => {
 
         if (host === `[::1]:${devPort}` || host === `::1:${devPort}`) {
           res.statusCode = 307
-          res.setHeader('Location', `http://${canonicalLocalHost}${req.url ?? '/'}`)
+          res.setHeader(
+            'Location',
+            `http://${canonicalLocalHost}${req.url ?? '/'}`,
+          )
           res.end()
           return
         }

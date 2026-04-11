@@ -1,4 +1,9 @@
-import { AlertCircle, CheckCircle2, LoaderCircle, LockKeyhole } from 'lucide-react'
+import {
+  AlertCircle,
+  CheckCircle2,
+  LoaderCircle,
+  LockKeyhole,
+} from 'lucide-react'
 import { startTransition, useEffect, useState } from 'react'
 import {
   completeSkillNode,
@@ -133,7 +138,9 @@ export default function SkillMapDashboard() {
           completedNodeIds: bundle.progress.completedNodeIds,
         })
       : null
-  const orderedNodes = clientSkillMap ? getNodesInLayoutOrder(clientSkillMap) : []
+  const orderedNodes = clientSkillMap
+    ? getNodesInLayoutOrder(clientSkillMap)
+    : []
   const resolvedNodes = resolvedNodesById
     ? orderedNodes.map((node) => resolvedNodesById[node.id])
     : []
@@ -199,8 +206,8 @@ export default function SkillMapDashboard() {
               実データで進捗が動くスキルマップ
             </h1>
             <p className="max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-              backend のユーザー、スキルマップ、進捗 API をつないで、
-              frontend から完了状態をそのまま更新できるところまで入れています。
+              backend のユーザー、スキルマップ、進捗 API をつないで、 frontend
+              から完了状態をそのまま更新できるところまで入れています。
             </p>
           </div>
 
@@ -280,20 +287,22 @@ export default function SkillMapDashboard() {
           {
             label: '現在の状態',
             value: isBootstrapping || isRefreshing ? '同期中' : '最新',
-            hint: isBootstrapping || isRefreshing ? 'API を再読込中' : 'frontend と backend が接続済み',
+            hint:
+              isBootstrapping || isRefreshing
+                ? 'API を再読込中'
+                : 'frontend と backend が接続済み',
           },
         ].map((item) => (
-          <article
-            key={item.label}
-            className="island-shell rounded-2xl p-5"
-          >
+          <article key={item.label} className="island-shell rounded-2xl p-5">
             <p className="m-0 text-sm font-semibold text-[var(--sea-ink-soft)]">
               {item.label}
             </p>
             <p className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--sea-ink)]">
               {item.value}
             </p>
-            <p className="mt-2 text-sm text-[var(--sea-ink-soft)]">{item.hint}</p>
+            <p className="mt-2 text-sm text-[var(--sea-ink-soft)]">
+              {item.hint}
+            </p>
           </article>
         ))}
       </section>
@@ -356,7 +365,11 @@ export default function SkillMapDashboard() {
                                 <span className="rounded-full border border-[rgba(50,143,151,0.2)] bg-white/70 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--lagoon-deep)]">
                                   {node.kind}
                                 </span>
-                                <span className={getStatusBadgeClassName(node.status)}>
+                                <span
+                                  className={getStatusBadgeClassName(
+                                    node.status,
+                                  )}
+                                >
                                   {statusLabelByNodeState[node.status]}
                                 </span>
                               </div>
@@ -377,7 +390,10 @@ export default function SkillMapDashboard() {
                           </p>
 
                           <p className="mt-4 text-xs leading-5 text-[var(--sea-ink-soft)]">
-                            {getUnlockSummary(node, clientSkillMap?.nodes ?? {})}
+                            {getUnlockSummary(
+                              node,
+                              clientSkillMap?.nodes ?? {},
+                            )}
                           </p>
 
                           <button
@@ -444,7 +460,8 @@ export default function SkillMapDashboard() {
               </ul>
             ) : (
               <p className="mt-3 text-sm leading-6 text-[var(--sea-ink-soft)]">
-                backend の validate API が現在のスキルマップを正常と判定しています。
+                backend の validate API
+                が現在のスキルマップを正常と判定しています。
               </p>
             )}
           </section>

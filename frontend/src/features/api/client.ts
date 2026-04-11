@@ -18,23 +18,20 @@ import type {
 } from './contracts'
 
 type Schema<TData> = {
-  safeParse:
-    | ((
-        input: unknown,
-      ) =>
-        | {
-            success: true
-            data: TData
-          }
-        | {
-            success: false
-            error: {
-              issues: Array<{
-                path: PropertyKey[]
-                message: string
-              }>
-            }
-          })
+  safeParse: (input: unknown) =>
+    | {
+        success: true
+        data: TData
+      }
+    | {
+        success: false
+        error: {
+          issues: Array<{
+            path: PropertyKey[]
+            message: string
+          }>
+        }
+      }
 }
 
 const DEFAULT_API_BASE_URL = 'http://localhost:8787'

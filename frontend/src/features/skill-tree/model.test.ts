@@ -46,7 +46,9 @@ describe('skill map model', () => {
   })
 
   it('returns nodes in visual layout order', () => {
-    expect(getNodesInLayoutOrder(sampleSkillMap).map((node) => node.id)).toEqual([
+    expect(
+      getNodesInLayoutOrder(sampleSkillMap).map((node) => node.id),
+    ).toEqual([
       'start-web',
       'minor-html',
       'minor-css',
@@ -86,6 +88,8 @@ describe('skill map model', () => {
     const validation = validateSkillMap(invalidMap)
 
     expect(validation.isValid).toBe(false)
-    expect(validation.issues.map((issue) => issue.code)).toContain('UNLOCK_CYCLE')
+    expect(validation.issues.map((issue) => issue.code)).toContain(
+      'UNLOCK_CYCLE',
+    )
   })
 })
