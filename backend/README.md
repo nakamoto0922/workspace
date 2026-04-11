@@ -20,6 +20,7 @@ API の使い方は [api.md](/workspace/docs/backend/api.md) を参照してく�
 開発用のひな形は [backend/.env.example](/workspace/backend/.env.example) にあります。
 
 Dev Container 内で動かす前提では、PostgreSQL ホストは `db` です。
+frontend からブラウザで接続するときは、`FRONTEND_ORIGIN` に通常 `http://127.0.0.1:3000` を設定します。backend は開発用に `localhost` / `127.0.0.1` / `[::1]` の loopback origin も受け入れます。
 
 ## DB コマンド
 

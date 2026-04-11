@@ -1,6 +1,8 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 import { ApiError } from './api-error.js'
 import { pool } from '../db/client.js'
+import { env } from './env.js'
 import { skillMapRoutes } from '../features/skill-map/api/skill-map-routes.js'
 import { skillNodeRoutes } from '../features/skill-map/api/skill-node-routes.js'
 import { skillEdgeRoutes } from '../features/skill-map/api/skill-edge-routes.js'
@@ -9,6 +11,21 @@ import { userRoutes } from '../features/users/api/user-routes.js'
 
 export function createApp() {
   const app = new Hono()
+
+  app.use(
+    '*',
+    cors({
+      origin: (requestOrigin) => {
+        if (!requestOrigin) {
+          return env.frontendOrigins[0] ?? ''
+        }
+
+        return env.frontendOrigins.includes(requestOrigin) ? requestOrigin : ''
+      },
+      allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowHeaders: ['Content-Type'],
+    }),
+  )
 
   app.get('/health', (c) =>
     c.json({

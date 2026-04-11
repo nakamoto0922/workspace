@@ -28,9 +28,9 @@ describe('skill map model', () => {
       completedNodeIds: ['start-web', 'minor-css'],
     })
 
-    expect(resolved['major-react']?.status).toBe('available')
-    expect(resolved['minor-html']?.status).toBe('available')
-    expect(resolved['minor-js']?.status).toBe('available')
+    expect(resolved['major-react'].status).toBe('available')
+    expect(resolved['minor-html'].status).toBe('available')
+    expect(resolved['minor-js'].status).toBe('available')
   })
 
   it('allows one node to unlock multiple downstream nodes', () => {
@@ -38,15 +38,17 @@ describe('skill map model', () => {
       completedNodeIds: ['start-web', 'minor-css', 'major-react'],
     })
 
-    expect(resolved['minor-props']?.status).toBe('available')
-    expect(resolved['minor-state']?.status).toBe('available')
-    expect(resolved['minor-fetch']?.status).toBe('available')
-    expect(resolved['minor-router']?.status).toBe('available')
-    expect(resolved['minor-form']?.status).toBe('available')
+    expect(resolved['minor-props'].status).toBe('available')
+    expect(resolved['minor-state'].status).toBe('available')
+    expect(resolved['minor-fetch'].status).toBe('available')
+    expect(resolved['minor-router'].status).toBe('available')
+    expect(resolved['minor-form'].status).toBe('available')
   })
 
   it('returns nodes in visual layout order', () => {
-    expect(getNodesInLayoutOrder(sampleSkillMap).map((node) => node.id)).toEqual([
+    expect(
+      getNodesInLayoutOrder(sampleSkillMap).map((node) => node.id),
+    ).toEqual([
       'start-web',
       'minor-html',
       'minor-css',
@@ -86,6 +88,8 @@ describe('skill map model', () => {
     const validation = validateSkillMap(invalidMap)
 
     expect(validation.isValid).toBe(false)
-    expect(validation.issues.map((issue) => issue.code)).toContain('UNLOCK_CYCLE')
+    expect(validation.issues.map((issue) => issue.code)).toContain(
+      'UNLOCK_CYCLE',
+    )
   })
 })
