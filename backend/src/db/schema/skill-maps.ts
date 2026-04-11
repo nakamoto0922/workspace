@@ -20,6 +20,8 @@ export const skillMaps = pgTable(
   },
   (table) => [unique('skill_maps_name_version_unique').on(table.name, table.version)],
 )
+export type SkillMapRow = typeof skillMaps.$inferSelect
+export type NewSkillMapRow = typeof skillMaps.$inferInsert
 
 export const skillNodes = pgTable(
   'skill_nodes',
@@ -46,6 +48,8 @@ export const skillNodes = pgTable(
     index('skill_nodes_code_idx').on(table.code),
   ],
 )
+export type SkillNodeRow = typeof skillNodes.$inferSelect
+export type NewSkillNodeRow = typeof skillNodes.$inferInsert
 
 export const skillEdges = pgTable(
   'skill_edges',
@@ -74,6 +78,8 @@ export const skillEdges = pgTable(
     index('skill_edges_to_node_id_idx').on(table.toNodeId),
   ],
 )
+export type SkillEdgeRow = typeof skillEdges.$inferSelect
+export type NewSkillEdgeRow = typeof skillEdges.$inferInsert
 
 export const skillNodeUnlockNodes = pgTable(
   'skill_node_unlock_nodes',
@@ -95,3 +101,5 @@ export const skillNodeUnlockNodes = pgTable(
     index('skill_node_unlock_nodes_required_node_id_idx').on(table.requiredNodeId),
   ],
 )
+export type SkillNodeUnlockNodeRow = typeof skillNodeUnlockNodes.$inferSelect
+export type NewSkillNodeUnlockNodeRow = typeof skillNodeUnlockNodes.$inferInsert

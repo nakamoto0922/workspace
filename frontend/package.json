@@ -9,16 +9,21 @@
     "#/*": "./src/*"
   },
   "scripts": {
+    "predev": "npm run build --workspace @workspace/contracts",
+    "prebuild": "npm run build --workspace @workspace/contracts",
+    "pretypecheck": "npm run build --workspace @workspace/contracts",
     "dev": "vite --host 0.0.0.0 --port 3000",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port 3000",
     "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint .",
     "format": "prettier --check .",
     "check": "npm run format && npm run lint",
     "fix": "prettier --write . && eslint . --fix"
   },
   "dependencies": {
+    "@workspace/contracts": "*",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "^0.10.0",
     "@tanstack/react-router": "^1.168.1",

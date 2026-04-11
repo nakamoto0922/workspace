@@ -6,6 +6,8 @@ export const users = pgTable('users', {
   name: varchar('name', { length: 255 }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
+export type UserRow = typeof users.$inferSelect
+export type NewUserRow = typeof users.$inferInsert
 
 export const userSkillNodeProgress = pgTable(
   'user_skill_node_progress',
@@ -35,3 +37,5 @@ export const userSkillNodeProgress = pgTable(
     index('user_skill_node_progress_skill_node_id_idx').on(table.skillNodeId),
   ],
 )
+export type UserSkillNodeProgressRow = typeof userSkillNodeProgress.$inferSelect
+export type NewUserSkillNodeProgressRow = typeof userSkillNodeProgress.$inferInsert

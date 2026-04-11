@@ -16,6 +16,7 @@ Drizzle を使うときの基本コマンドをまとめたものです。
 普段よく使うのはこの4つです。
 
 ```bash
+npm run db:baseline --workspace backend -- 0000_watery_morgan_stark
 npm run db:generate --workspace backend
 npm run db:migrate --workspace backend
 npm run db:seed --workspace backend
@@ -24,6 +25,7 @@ npm run test:backend
 
 意味:
 
+- `db:baseline`: 既存DBに migration 履歴だけを登録する
 - `db:generate`: スキーマから migration ファイルを生成する
 - `db:migrate`: 生成済み migration をDBへ適用する
 - `db:seed`: 開発用のサンプルデータを投入する
@@ -53,7 +55,34 @@ npm ci
 
 ---
 
-## 3. migration を生成する
+## 3. baseline を入れる
+
+以前 `db:push` などで作った既存DBを
+`db:migrate` 運用へ移したいときは最初にこれを実行します。
+
+```bash
+cd /workspace
+npm run db:baseline --workspace backend -- 0000_watery_morgan_stark
+```
+
+これは schema 自体を変更せず、
+`drizzle.__drizzle_migrations` に既存 migration の履歴を登録します。
+
+どこまで適用済みのDBかに応じて、
+最後の引数に baseline 対象の tag を渡します。
+
+例:
+
+- `0000_watery_morgan_stark` まで入っているDB
+- `0001_wandering_the_santerians` まで入っているDB
+
+のように、実際の状態に合わせて指定します。
+
+初回だけ必要になる想定です。
+
+---
+
+## 4. migration を生成する
 
 スキーマ変更後に migration を生成します。
 
@@ -73,7 +102,7 @@ npm run db:generate --workspace backend
 
 ---
 
-## 4. migration を適用する
+## 5. migration を適用する
 
 ローカルDBに生成済み migration を適用します。
 
@@ -95,7 +124,7 @@ npm run db:migrate --workspace backend
 
 ---
 
-## 5. seed を流す
+## 6. seed を流す
 
 開発確認用のデータを入れたいときは次を実行します。
 
@@ -115,7 +144,7 @@ npm run db:seed --workspace backend
 
 ---
 
-## 6. `db:push` を使う場面
+## 7. `db:push` を使う場面
 
 ```bash
 cd /workspace
@@ -130,7 +159,7 @@ npm run db:push --workspace backend
 
 ---
 
-## 7. 型チェックする
+## 8. 型チェックする
 
 スキーマや repository を変えたあとに確認します。
 
@@ -151,7 +180,7 @@ npm run test:backend
 
 ---
 
-## 8. ビルド確認する
+## 9. ビルド確認する
 
 型チェックだけでなく、ビルドできるかも見たいときはこれです。
 
@@ -162,7 +191,7 @@ npm run build:backend
 
 ---
 
-## 9. バックエンドを起動する
+## 10. バックエンドを起動する
 
 Hono のサーバーを起動します。
 
@@ -175,15 +204,16 @@ npm run dev:backend
 
 ---
 
-## 10. よくある作業の流れ
+## 11. よくある作業の流れ
 
 ### テーブルを追加したいとき
 
-1. `backend/src/db/schema/*.ts` を編集
-2. `npm run db:generate --workspace backend`
-3. `npm run db:migrate --workspace backend`
-4. 必要なら `npm run db:seed --workspace backend`
-5. `npm run test:backend`
+1. 既存DBなら最初に `npm run db:baseline --workspace backend -- <適用済みtag>`
+2. `backend/src/db/schema/*.ts` を編集
+3. `npm run db:generate --workspace backend`
+4. `npm run db:migrate --workspace backend`
+5. 必要なら `npm run db:seed --workspace backend`
+6. `npm run test:backend`
 
 ### カラムを追加したいとき
 
@@ -199,7 +229,7 @@ npm run dev:backend
 
 ---
 
-## 11. 設定ファイル
+## 12. 設定ファイル
 
 Drizzle の設定は [drizzle.config.ts](/workspace/backend/drizzle.config.ts) にあります。
 
@@ -212,7 +242,7 @@ Drizzle の設定は [drizzle.config.ts](/workspace/backend/drizzle.config.ts) �
 
 ---
 
-## 12. 環境変数
+## 13. 環境変数
 
 DB接続文字列は `DATABASE_URL` を使います。
 
@@ -227,14 +257,15 @@ postgres://postgres:postgres@localhost:5432/appdb
 
 ---
 
-## 13. まず何を使えばいいか
+## 14. まず何を使えばいいか
 
 迷ったら次の順番で十分です。
 
-1. スキーマを書く
-2. `npm run db:generate --workspace backend`
-3. `npm run db:migrate --workspace backend`
-4. 必要なら `npm run db:seed --workspace backend`
-5. `npm run test:backend`
+1. 既存DBなら最初に `npm run db:baseline --workspace backend -- <適用済みtag>`
+2. スキーマを書く
+3. `npm run db:generate --workspace backend`
+4. `npm run db:migrate --workspace backend`
+5. 必要なら `npm run db:seed --workspace backend`
+6. `npm run test:backend`
 
 最初はこれだけ覚えておけば進められます。
