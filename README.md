@@ -14,15 +14,25 @@
 
 ```bash
 npm run dev
+npm run dev:frontend
+npm run dev:backend
 npm run build
 npm run test
 ```
 
-これらは現在 `frontend` ワークスペースを対象に実行されます。
+主な役割は次のとおりです。
+
+- `npm run dev`: frontend と backend を並列で起動
+- `npm run dev:frontend`: frontend だけを起動
+- `npm run dev:backend`: backend だけを起動
+- `npm run build`: frontend をビルド
+- `npm run test`: frontend のテストを実行
+
+backend の起動には、別途 PostgreSQL の用意と migration / seed が必要です。
 
 ## 依存のインストール
 
-現時点ではフロントエンド依存のみ管理しています。
+ルートの依存に加えて、workspace 依存もまとめて管理しています。
 
 ```bash
 npm ci

@@ -26,6 +26,11 @@ npm run dev
 ```
 
 アプリは `http://localhost:3000` で確認できます。
+backend は `http://localhost:8787` で待ち受けます。
+
+`npm run dev` はルートから frontend と backend を一緒に起動します。frontend だけ起動したいときは `npm run dev:frontend` を使います。
+
+既定では frontend は `127.0.0.1:3000` にバインドするので、ブラウザ URL が `http://[::1]:3000` になるのを避けやすくしています。外部公開が必要なときだけ `FRONTEND_HOST=0.0.0.0` に切り替えられます。
 
 ### Dev Container で起動する場合
 
@@ -43,12 +48,14 @@ Dev Container では [`.devcontainer/devcontainer.json`](/workspace/.devcontaine
 cp frontend/.env.example frontend/.env
 ```
 
-現時点ではアプリ本体で必須の環境変数はありませんが、将来の DB 接続やサーバー設定に使えるよう、開発用の基本値を入れています。
+現在の frontend は backend API を利用するので、`VITE_API_BASE_URL` を使って接続先を切り替えられます。ローカル開発では通常 `http://localhost:8787` のままで大丈夫です。`FRONTEND_HOST` は dev server のバインド先で、既定値は `127.0.0.1` です。
 
 ## よく使うコマンド
 
 ```bash
 npm run dev
+npm run dev:frontend
+npm run dev:backend
 npm run build
 npm run preview
 npm run lint
@@ -60,7 +67,9 @@ npm run test
 
 各コマンドの役割は次のとおりです。
 
-- `npm run dev`: ルートから frontend の開発サーバーを起動
+- `npm run dev`: ルートから frontend と backend を並列起動
+- `npm run dev:frontend`: ルートから frontend の開発サーバーを起動
+- `npm run dev:backend`: ルートから backend の開発サーバーを起動
 - `npm run build`: ルートから frontend の本番ビルドを作成
 - `npm run preview`: ルートから frontend のビルド結果を確認
 - `npm run lint`: ルートから frontend の静的解析を実行

@@ -28,9 +28,9 @@ describe('skill map model', () => {
       completedNodeIds: ['start-web', 'minor-css'],
     })
 
-    expect(resolved['major-react']?.status).toBe('available')
-    expect(resolved['minor-html']?.status).toBe('available')
-    expect(resolved['minor-js']?.status).toBe('available')
+    expect(resolved['major-react'].status).toBe('available')
+    expect(resolved['minor-html'].status).toBe('available')
+    expect(resolved['minor-js'].status).toBe('available')
   })
 
   it('allows one node to unlock multiple downstream nodes', () => {
@@ -38,11 +38,11 @@ describe('skill map model', () => {
       completedNodeIds: ['start-web', 'minor-css', 'major-react'],
     })
 
-    expect(resolved['minor-props']?.status).toBe('available')
-    expect(resolved['minor-state']?.status).toBe('available')
-    expect(resolved['minor-fetch']?.status).toBe('available')
-    expect(resolved['minor-router']?.status).toBe('available')
-    expect(resolved['minor-form']?.status).toBe('available')
+    expect(resolved['minor-props'].status).toBe('available')
+    expect(resolved['minor-state'].status).toBe('available')
+    expect(resolved['minor-fetch'].status).toBe('available')
+    expect(resolved['minor-router'].status).toBe('available')
+    expect(resolved['minor-form'].status).toBe('available')
   })
 
   it('returns nodes in visual layout order', () => {

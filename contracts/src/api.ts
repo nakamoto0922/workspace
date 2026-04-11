@@ -8,6 +8,11 @@ export const isoDateTimeStringSchema = z.string()
 
 export const idSchema = nonEmptyStringSchema
 
+export const apiErrorResponseSchema = z.object({
+  message: nonEmptyStringSchema,
+})
+export type ApiErrorResponse = z.infer<typeof apiErrorResponseSchema>
+
 export const healthResponseSchema = z.object({
   status: z.literal('ok'),
 })
@@ -30,6 +35,9 @@ export const userSummarySchema = z.object({
   createdAt: isoDateTimeStringSchema,
 })
 export type UserSummary = z.infer<typeof userSummarySchema>
+
+export const userSummaryListSchema = z.array(userSummarySchema)
+export type UserSummaryList = z.infer<typeof userSummaryListSchema>
 
 export const userProgressQuerySchema = z.object({
   skillMapId: nonEmptyStringSchema.optional(),
@@ -105,6 +113,9 @@ export const skillMapSummarySchema = z.object({
   updatedAt: isoDateTimeStringSchema,
 })
 export type SkillMapSummary = z.infer<typeof skillMapSummarySchema>
+
+export const skillMapSummaryListSchema = z.array(skillMapSummarySchema)
+export type SkillMapSummaryList = z.infer<typeof skillMapSummaryListSchema>
 
 export const skillMapDetailSchema = z.object({
   id: idSchema,

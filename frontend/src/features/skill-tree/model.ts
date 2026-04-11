@@ -43,7 +43,7 @@ export type SkillEdge = {
 }
 
 export type SkillMap = {
-  version: 2
+  version: number
   nodes: Record<SkillNodeId, SkillNode>
   edges: Record<SkillEdgeId, SkillEdge>
 }
@@ -208,7 +208,7 @@ export function getAvailableNodeIds(
   state: SkillMapState,
 ): SkillNodeId[] {
   return getNodesInLayoutOrder(map)
-    .filter((node) => resolveSkillMap(map, state)[node.id]?.status === 'available')
+    .filter((node) => resolveSkillMap(map, state)[node.id].status === 'available')
     .map((node) => node.id)
 }
 
@@ -449,8 +449,8 @@ function detectUnlockCycles(map: SkillMap): SkillMapIssue[] {
     visited.add(nodeId)
     inStack.add(nodeId)
 
-    for (const dependencyNodeId of map.nodes[nodeId]?.unlock.nodeIds ?? []) {
-      if (map.nodes[dependencyNodeId]) {
+    for (const dependencyNodeId of map.nodes[nodeId].unlock.nodeIds) {
+      if (Object.hasOwn(map.nodes, dependencyNodeId)) {
         visit(dependencyNodeId)
       }
     }

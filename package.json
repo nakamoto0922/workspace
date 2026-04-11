@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "build:contracts": "npm run build --workspace @workspace/contracts",
-    "dev": "npm run dev --workspace frontend",
+    "dev": "npm run build:contracts && concurrently -k -n backend,frontend -c blue,green \"npm run dev:raw --workspace backend\" \"npm run dev:raw --workspace frontend\"",
+    "dev:frontend": "npm run dev --workspace frontend",
     "dev:backend": "npm run build:contracts && npm run dev --workspace backend",
     "build": "npm run build --workspace frontend",
     "build:backend": "npm run build:contracts && npm run build --workspace backend",
@@ -19,5 +20,8 @@
     "fix": "npm run fix --workspace frontend",
     "test": "npm run test --workspace frontend",
     "test:backend": "npm run build:contracts && npm run test --workspace backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }
