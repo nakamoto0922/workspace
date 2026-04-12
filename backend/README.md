@@ -13,16 +13,18 @@ Hono + Drizzle + PostgreSQL を前提にしたバックエンドです。
 - 最小 API エンドポイント
 
 詳しい構成は [backend-architecture.md](/workspace/docs/backend/backend-architecture.md) を参照してください。
+API の使い方は [api.md](/workspace/docs/backend/api.md) を参照してください。
 
 ## 環境変数
 
 開発用のひな形は [backend/.env.example](/workspace/backend/.env.example) にあります。
 
 Dev Container 内で動かす前提では、PostgreSQL ホストは `db` です。
+frontend からブラウザで接続するときは、`FRONTEND_ORIGIN` に通常 `http://127.0.0.1:3000` を設定します。backend は開発用に `localhost` / `127.0.0.1` / `[::1]` の loopback origin も受け入れます。
 
 ## DB コマンド
 
-DBスキーマを変更したあとの基本フローは次の通りです。
+クリーンなDBから始めるときの基本フローは次の通りです。
 
 ```bash
 cd /workspace
@@ -34,5 +36,8 @@ npm run db:seed --workspace backend
 - `db:generate`: schema 変更から migration SQL を生成する
 - `db:migrate`: 生成済み migration を DB に適用する
 - `db:seed`: 開発確認用のサンプルデータを投入する
+
+既存DBを migration 履歴に合わせたいときだけ、必要に応じて
+`db:baseline --workspace backend -- <適用済みtag>` を使います。
 
 `db:push` も残していますが、日常運用は `generate` + `migrate` を基本にする想定です。
